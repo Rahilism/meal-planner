@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Muscle Gain Meal Plan</title>
+<meta name="theme-color" content="#FF6B35" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<link rel="manifest" href="manifest.json" />
+<link rel="icon" href="icon-192.png" />
+<link rel="apple-touch-icon" href="icon-192.png" />
+<style>
+  html, body { margin:0; padding:0; background:#0f0c29; overscroll-behavior:none; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  #root { min-height:100vh; }
+</style>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState } = React;
+
+const days = [
+  { day: "Day 1", label: "Monday", meals: [
+    { time: "7:30 AM", type: "Pre-Workout", icon: "⚡", color: "#FF6B35", meals: ["Banana (1 large)", "Whole wheat bread toast (2 slices)", "Peanut butter (1 tbsp)", "Water (500ml)"], kcal: 350, protein: 10, carbs: 52, fats: 10, fibre: 6,
+      steps: ["Toast the bread slices until golden.", "Spread peanut butter evenly on both slices.", "Slice the banana and eat alongside, or layer on top of toast.", "Drink water while eating — avoid heavy fats right before gym."] },
+    { time: "11:30 AM", type: "Post-Workout", icon: "🥤", color: "#4CAF50", meals: ["Whey protein shake (30g in milk)", "Banana (1)"], kcal: 280, protein: 28, carbs: 30, fats: 4, fibre: 2,
+      steps: ["Add 250-300ml cold milk to a shaker.", "Add 1 scoop (30g) whey protein.", "Shake well for 15-20 seconds until smooth.", "Drink within 30 min post-workout with the banana."] },
+    { time: "1:30 PM", type: "Lunch", icon: "🍛", color: "#E91E63", meals: ["Chicken breast (180g) – grilled/curry", "White rice (250g cooked)", "Dal (1 small bowl)", "Salad (cucumber, tomato, onion)"], kcal: 720, protein: 48, carbs: 80, fats: 12, fibre: 9,
+      steps: ["Marinate chicken breast with ginger-garlic paste, turmeric, chili powder and salt for 15 min.", "Pan-sear or grill chicken 5-6 min per side until cooked through (or simmer in light curry base 15 min).", "Cook rice separately (1 part rice : 2 parts water, 15 min covered).", "Pressure-cook dal (yellow moong/toor) with turmeric and salt, 3-4 whistles, then temper with cumin and garlic.", "Chop cucumber, tomato and onion, squeeze lemon, and plate everything together."] },
+    { time: "4:30 PM", type: "Evening Snack", icon: "🥜", color: "#FF9800", meals: ["Boiled eggs (3)", "Mixed nuts (30g)", "Chai (without sugar optional)"], kcal: 300, protein: 20, carbs: 8, fats: 22, fibre: 2,
+      steps: ["Boil eggs in water for 9-10 minutes, then cool in cold water and peel.", "Portion out 30g mixed nuts (almonds, walnuts, cashews).", "Brew chai with tea leaves, water and milk; skip sugar if cutting calories."] },
+    { time: "8:00 PM", type: "Dinner", icon: "🍽️", color: "#9C27B0", meals: ["Chicken thighs (200g) – grilled/curry", "Roti (3 whole wheat)", "Sabzi (mixed veg)", "Curd (1 small bowl)"], kcal: 720, protein: 45, carbs: 68, fats: 18, fibre: 8,
+      steps: ["Marinate chicken thighs with yogurt, ginger-garlic, and spices for 20 min, then grill or cook in a light gravy 20-25 min.", "Knead whole wheat atta with water, rest 10 min, roll and cook rotis on a hot tawa.", "Sauté chopped mixed vegetables (beans, carrot, capsicum) with cumin, turmeric and salt, 10-12 min.", "Serve with a bowl of fresh curd."] },
+    { time: "10:30 PM", type: "Before Bed", icon: "🌙", color: "#3F51B5", meals: ["Paneer (100g) or Greek yogurt (150g)", "Handful of almonds"], kcal: 200, protein: 16, carbs: 6, fats: 12, fibre: 1,
+      steps: ["Cube the paneer (raw or lightly pan-toasted with a pinch of pepper) — or scoop out Greek yogurt.", "Eat with a handful of almonds about 30-45 min before sleeping for slow-digesting protein overnight."] },
+  ]},
+  { day: "Day 2", label: "Tuesday", meals: [
+    { time: "7:30 AM", type: "Pre-Workout", icon: "⚡", color: "#FF6B35", meals: ["Oats (80g cooked in milk)", "Banana (1)", "Honey (1 tsp)"], kcal: 380, protein: 12, carbs: 62, fats: 7, fibre: 8,
+      steps: ["Heat 250ml milk in a pan, add 80g rolled oats.", "Simmer on low 5-6 min, stirring, until thick and creamy.", "Slice banana on top and drizzle honey before serving."] },
+    { time: "11:30 AM", type: "Post-Workout", icon: "🥤", color: "#4CAF50", meals: ["Whey protein shake (30g in water)", "2 whole eggs (boiled)"], kcal: 270, protein: 30, carbs: 8, fats: 9, fibre: 0,
+      steps: ["Shake 1 scoop whey with 300ml cold water until smooth.", "Boil 2 eggs for 9-10 min, cool, peel, and eat alongside."] },
+    { time: "1:30 PM", type: "Lunch", icon: "🍛", color: "#E91E63", meals: ["Egg bhurji (4 eggs)", "Roti (3 whole wheat)", "Rajma (1 bowl)", "Salad"], kcal: 700, protein: 42, carbs: 72, fats: 18, fibre: 12,
+      steps: ["Sauté chopped onion, tomato, green chili in a little oil until soft.", "Whisk 4 eggs with salt and turmeric, pour into the pan and scramble until fully cooked.", "Pressure-cook soaked rajma with onion-tomato masala, ginger-garlic and spices, 5-6 whistles until soft.", "Roll and cook rotis on a hot tawa.", "Plate with a side salad."] },
+    { time: "4:30 PM", type: "Evening Snack", icon: "🥜", color: "#FF9800", meals: ["Chicken sandwich (100g chicken + 2 bread slices)", "Banana (1)"], kcal: 350, protein: 28, carbs: 40, fats: 8, fibre: 4,
+      steps: ["Shred or slice 100g cooked/grilled chicken.", "Layer chicken with light mayo or mustard, lettuce and tomato between 2 bread slices.", "Toast lightly if preferred and serve with a banana."] },
+    { time: "8:00 PM", type: "Dinner", icon: "🍽️", color: "#9C27B0", meals: ["Salmon / Fish curry (200g)", "Brown rice (200g cooked)", "Stir fry vegetables", "Curd"], kcal: 700, protein: 44, carbs: 60, fats: 20, fibre: 7,
+      steps: ["Marinate fish with turmeric, salt and lemon for 10 min.", "Pan-sear fish 3-4 min per side, or simmer in a light coconut/tomato curry base 12-15 min.", "Cook brown rice (25-30 min, 1:2.5 rice-water ratio).", "Stir-fry mixed vegetables in a hot pan with garlic and a dash of soy or salt, 5-6 min.", "Serve with a small bowl of curd."] },
+    { time: "10:30 PM", type: "Before Bed", icon: "🌙", color: "#3F51B5", meals: ["Milk (250ml warm)", "Paneer (80g)"], kcal: 210, protein: 18, carbs: 10, fats: 10, fibre: 0,
+      steps: ["Warm 250ml milk gently (do not boil hard).", "Eat 80g paneer cubes alongside, plain or with a pinch of pepper."] },
+  ]},
+  { day: "Day 3", label: "Wednesday", meals: [
+    { time: "7:30 AM", type: "Pre-Workout", icon: "⚡", color: "#FF6B35", meals: ["Scrambled eggs (3)", "Brown bread toast (2)", "Orange juice (1 glass)"], kcal: 370, protein: 22, carbs: 42, fats: 12, fibre: 4,
+      steps: ["Whisk 3 eggs with a pinch of salt and pepper.", "Cook on low-medium heat in a lightly greased pan, stirring gently until soft and just set.", "Toast the brown bread and serve with a fresh glass of orange juice."] },
+    { time: "11:30 AM", type: "Post-Workout", icon: "🥤", color: "#4CAF50", meals: ["Whey protein shake (30g in milk)", "Apple (1)"], kcal: 280, protein: 28, carbs: 32, fats: 4, fibre: 4,
+      steps: ["Blend or shake 1 scoop whey with 300ml milk until smooth.", "Wash and eat an apple alongside."] },
+    { time: "1:30 PM", type: "Lunch", icon: "🍛", color: "#E91E63", meals: ["Chicken biryani (home-made, 350g)", "Raita (1 bowl)", "Salad"], kcal: 750, protein: 45, carbs: 82, fats: 18, fibre: 6,
+      steps: ["Marinate chicken with yogurt, ginger-garlic, chili and biryani masala for 20-30 min.", "Par-boil basmati rice with whole spices until 70% done, then drain.", "Layer marinated chicken and rice in a heavy pot, cover tightly and cook on dum (low heat) 20-25 min.", "Whisk curd with roasted cumin powder, salt and chopped cucumber for raita.", "Serve hot with raita and salad."] },
+    { time: "4:30 PM", type: "Evening Snack", icon: "🥜", color: "#FF9800", meals: ["Boiled chana (1 cup)", "Boiled eggs (2)", "Lemon + salt seasoning"], kcal: 280, protein: 22, carbs: 28, fats: 8, fibre: 10,
+      steps: ["Soak chana overnight, then pressure-cook 15-20 min until soft.", "Boil eggs 9-10 min, peel and halve.", "Toss chana with lemon juice, salt, chaat masala and chopped onion; serve with eggs."] },
+    { time: "8:00 PM", type: "Dinner", icon: "🍽️", color: "#9C27B0", meals: ["Mutton / Chicken keema (150g)", "Roti (3)", "Dal tadka (1 bowl)", "Cucumber salad"], kcal: 720, protein: 42, carbs: 65, fats: 22, fibre: 9,
+      steps: ["Sauté onion, ginger-garlic and tomato until soft, add keema and spices.", "Cook keema on medium heat 15-20 min until fully done, adding water as needed.", "Cook dal (toor/moong) with turmeric, then temper with ghee, cumin and garlic.", "Roll and cook rotis; serve with sliced cucumber."] },
+    { time: "10:30 PM", type: "Before Bed", icon: "🌙", color: "#3F51B5", meals: ["Greek yogurt (150g)", "Walnuts (5-6 pieces)"], kcal: 200, protein: 15, carbs: 10, fats: 11, fibre: 1,
+      steps: ["Scoop Greek yogurt into a bowl.", "Top with roughly chopped walnuts and eat before bed."] },
+  ]},
+  { day: "Day 4", label: "Thursday", meals: [
+    { time: "7:30 AM", type: "Pre-Workout", icon: "⚡", color: "#FF6B35", meals: ["Banana (1)", "Peanut butter toast (2 slices)", "Boiled egg (1)"], kcal: 360, protein: 14, carbs: 48, fats: 12, fibre: 5,
+      steps: ["Toast bread and spread peanut butter on both slices.", "Boil 1 egg for 9-10 min, peel.", "Serve toast with banana and boiled egg on the side."] },
+    { time: "11:30 AM", type: "Post-Workout", icon: "🥤", color: "#4CAF50", meals: ["Whey protein (30g) in milk", "Banana (1)"], kcal: 290, protein: 30, carbs: 32, fats: 4, fibre: 2,
+      steps: ["Shake 1 scoop whey with 300ml cold milk.", "Drink post-workout along with a banana."] },
+    { time: "1:30 PM", type: "Lunch", icon: "🍛", color: "#E91E63", meals: ["Chicken curry (200g)", "Rice (250g cooked)", "Moong dal (1 bowl)", "Salad"], kcal: 730, protein: 50, carbs: 76, fats: 14, fibre: 8,
+      steps: ["Sauté onion-tomato masala with ginger-garlic and spices until oil separates.", "Add chicken pieces, cook covered 20-25 min until tender.", "Cook rice separately; pressure-cook moong dal with turmeric and temper with cumin.", "Plate curry with rice, dal and a fresh salad."] },
+    { time: "4:30 PM", type: "Evening Snack", icon: "🥜", color: "#FF9800", meals: ["Paneer tikka (100g)", "Mint chutney", "Lassi (1 glass unsweetened)"], kcal: 320, protein: 22, carbs: 18, fats: 16, fibre: 1,
+      steps: ["Marinate paneer cubes in yogurt, tikka masala and lemon for 15 min.", "Pan-grill or air-fry paneer cubes 8-10 min, turning until lightly charred.", "Blend curd with water and a pinch of salt for a quick unsweetened lassi.", "Serve paneer tikka with mint chutney."] },
+    { time: "8:00 PM", type: "Dinner", icon: "🍽️", color: "#9C27B0", meals: ["Grilled fish (200g)", "Sweet potato (150g roasted)", "Stir-fried spinach", "Roti (2)"], kcal: 680, protein: 42, carbs: 62, fats: 16, fibre: 10,
+      steps: ["Marinate fish with lemon, garlic, paprika and salt for 10 min, then grill or pan-sear 4-5 min per side.", "Cube sweet potato and roast in oven or air-fryer at 200°C for 20-25 min.", "Sauté spinach with garlic and a dash of oil for 3-4 min.", "Cook 2 rotis and plate everything together."] },
+    { time: "10:30 PM", type: "Before Bed", icon: "🌙", color: "#3F51B5", meals: ["Warm milk (250ml)", "Almonds (10 pieces)"], kcal: 200, protein: 10, carbs: 12, fats: 12, fibre: 1,
+      steps: ["Warm 250ml milk gently.", "Eat 10 almonds alongside before sleeping."] },
+  ]},
+  { day: "Day 5", label: "Friday", meals: [
+    { time: "7:30 AM", type: "Pre-Workout", icon: "⚡", color: "#FF6B35", meals: ["Poha (1.5 cups) with peanuts", "Boiled egg (2)", "Tea"], kcal: 380, protein: 18, carbs: 50, fats: 12, fibre: 4,
+      steps: ["Rinse flattened rice (poha) in water briefly and drain.", "Sauté mustard seeds, curry leaves, onion and peanuts in oil; add turmeric.", "Add poha, salt and a squeeze of lemon; toss on low heat 3-4 min.", "Boil 2 eggs, peel, and serve with tea."] },
+    { time: "11:30 AM", type: "Post-Workout", icon: "🥤", color: "#4CAF50", meals: ["Protein shake (30g whey + milk)", "Dates (3-4)"], kcal: 300, protein: 28, carbs: 36, fats: 4, fibre: 2,
+      steps: ["Shake 1 scoop whey with 300ml milk until smooth.", "Eat 3-4 dates alongside for quick post-workout carbs."] },
+    { time: "1:30 PM", type: "Lunch", icon: "🍛", color: "#E91E63", meals: ["Chicken tikka masala (200g)", "Jeera rice (250g)", "Dal makhani (1 bowl)", "Salad"], kcal: 760, protein: 48, carbs: 84, fats: 18, fibre: 10,
+      steps: ["Marinate chicken in yogurt and tikka spices, grill or pan-sear until charred at edges.", "Simmer tikka pieces in a tomato-cream based gravy 10-12 min.", "Cook rice with cumin seeds tempered in ghee.", "Simmer soaked whole urad dal and rajma with butter, tomato and cream for dal makhani.", "Plate with fresh salad."] },
+    { time: "4:30 PM", type: "Evening Snack", icon: "🥜", color: "#FF9800", meals: ["Egg omelette (3 eggs) with veggies", "Brown bread (1 slice)"], kcal: 300, protein: 22, carbs: 18, fats: 16, fibre: 3,
+      steps: ["Whisk 3 eggs with chopped onion, tomato, capsicum, salt and pepper.", "Pour into a hot greased pan, cook 3-4 min per side until set.", "Serve with a slice of toasted brown bread."] },
+    { time: "8:00 PM", type: "Dinner", icon: "🍽️", color: "#9C27B0", meals: ["Tandoori chicken (200g)", "Roti (3)", "Sautéed mixed veg", "Raita"], kcal: 700, protein: 46, carbs: 66, fats: 16, fibre: 8,
+      steps: ["Marinate chicken in yogurt, tandoori masala, ginger-garlic and lemon for 30 min.", "Grill, bake (200°C, 25-30 min) or pan-sear until cooked through and lightly charred.", "Sauté mixed vegetables with cumin and light spices.", "Cook rotis and whisk curd with cumin powder and salt for raita."] },
+    { time: "10:30 PM", type: "Before Bed", icon: "🌙", color: "#3F51B5", meals: ["Paneer (100g) with pepper", "Cashews (10 pieces)"], kcal: 210, protein: 16, carbs: 8, fats: 14, fibre: 1,
+      steps: ["Cube paneer and sprinkle with black pepper and a pinch of salt.", "Eat with 10 cashews before bed."] },
+  ]},
+  { day: "Day 6", label: "Saturday", meals: [
+    { time: "7:30 AM", type: "Pre-Workout", icon: "⚡", color: "#FF6B35", meals: ["Upma (1.5 cups)", "Boiled eggs (3)", "Fresh fruit juice"], kcal: 400, protein: 20, carbs: 54, fats: 12, fibre: 5,
+      steps: ["Dry roast semolina (rava) until lightly golden and aromatic; set aside.", "Temper mustard seeds, curry leaves, chana dal and chopped onion in oil.", "Add water, bring to boil, then slowly stir in roasted rava; cook 3-4 min covered.", "Boil eggs and serve with fresh fruit juice."] },
+    { time: "11:30 AM", type: "Post-Workout", icon: "🥤", color: "#4CAF50", meals: ["Whey protein (30g in milk)", "Banana (1)"], kcal: 280, protein: 28, carbs: 30, fats: 4, fibre: 2,
+      steps: ["Shake 1 scoop whey with 300ml milk until smooth.", "Drink with a banana post-workout."] },
+    { time: "1:30 PM", type: "Lunch", icon: "🍛", color: "#E91E63", meals: ["Egg fried rice (300g) with chicken (150g)", "Curd (1 bowl)", "Salad"], kcal: 740, protein: 46, carbs: 78, fats: 18, fibre: 5,
+      steps: ["Cook and cool rice in advance (day-old works best).", "Stir-fry diced chicken in a hot wok until cooked, set aside.", "Scramble eggs in the same wok, then add rice, chicken, soy sauce, spring onion and pepper; toss 5-6 min.", "Serve with curd and a side salad."] },
+    { time: "4:30 PM", type: "Evening Snack", icon: "🥜", color: "#FF9800", meals: ["Sprouts chaat (1 cup) with chicken strips (80g)", "Lemon + chaat masala"], kcal: 280, protein: 24, carbs: 24, fats: 8, fibre: 6,
+      steps: ["Steam or lightly boil moong sprouts for 3-4 min until just tender.", "Pan-sear seasoned chicken strips 5-6 min until cooked through.", "Toss sprouts with chopped onion, tomato, lemon juice and chaat masala; top with chicken strips."] },
+    { time: "8:00 PM", type: "Dinner", icon: "🍽️", color: "#9C27B0", meals: ["Chicken/Mutton curry (200g)", "Roti (3)", "Dal (1 bowl)", "Onion salad"], kcal: 730, protein: 48, carbs: 70, fats: 18, fibre: 9,
+      steps: ["Sauté onion-tomato-ginger-garlic masala until oil separates, add spices.", "Add chicken or mutton, cook covered until tender (20-25 min chicken, 35-40 min mutton).", "Pressure-cook dal with turmeric and temper with cumin and garlic.", "Cook rotis and serve with sliced onion salad."] },
+    { time: "10:30 PM", type: "Before Bed", icon: "🌙", color: "#3F51B5", meals: ["Greek yogurt (150g)", "Almonds (10 pieces)"], kcal: 200, protein: 14, carbs: 10, fats: 11, fibre: 1,
+      steps: ["Scoop Greek yogurt into a bowl.", "Eat with 10 almonds before sleeping."] },
+  ]},
+];
+
+function MacroBar({ value, max, color }) {
+  const pct = Math.min((value / max) * 100, 100);
+  return (
+    <div style={{ background: "rgba(255,255,255,0.08)", borderRadius: 6, height: 6, width: "100%", overflow: "hidden" }}>
+      <div style={{ width: `${pct}%`, height: "100%", background: color, borderRadius: 6, transition: "width 0.4s ease" }} />
+    </div>
+  );
+}
+
+function MealPlan() {
+  const [activeDay, setActiveDay] = useState(0);
+  const [expandedMeal, setExpandedMeal] = useState(null);
+  const [showRecipe, setShowRecipe] = useState({});
+
+  const currentDay = days[activeDay];
+  const totalKcal = currentDay.meals.reduce((s, m) => s + m.kcal, 0);
+  const totalProtein = currentDay.meals.reduce((s, m) => s + m.protein, 0);
+  const totalCarbs = currentDay.meals.reduce((s, m) => s + m.carbs, 0);
+  const totalFats = currentDay.meals.reduce((s, m) => s + m.fats, 0);
+  const totalFibre = currentDay.meals.reduce((s, m) => s + m.fibre, 0);
+
+  const toggleRecipe = (i, e) => {
+    e.stopPropagation();
+    setShowRecipe(prev => ({ ...prev, [i]: !prev[i] }));
+  };
+
+  return (
+    <div style={{ minHeight: "100vh", background: "linear-gradient(135deg, #0f0c29, #302b63, #24243e)", fontFamily: "Georgia, serif", padding: "0 0 60px", color: "#fff" }}>
+      <div style={{ background: "linear-gradient(90deg, #FF6B35, #E91E63)", padding: "28px 24px 20px", textAlign: "center" }}>
+        <div style={{ fontSize: 11, letterSpacing: 4, textTransform: "uppercase", opacity: 0.85, marginBottom: 6 }}>6-Day Indian Bulking Plan</div>
+        <div style={{ fontSize: 26, fontWeight: "bold", letterSpacing: 1 }}>🇮🇳 Muscle Gain Meal Plan</div>
+        <div style={{ fontSize: 12, opacity: 0.85, marginTop: 6 }}>180cm · 59kg · Gym @ 10 AM · ~3,000 kcal/day</div>
+      </div>
+
+      <div style={{ display: "flex", overflowX: "auto", gap: 8, padding: "16px 16px 0" }}>
+        {days.map((d, i) => (
+          <button key={i} onClick={() => { setActiveDay(i); setExpandedMeal(null); setShowRecipe({}); }} style={{
+            flex: "0 0 auto", padding: "10px 18px", borderRadius: 50, border: "none", cursor: "pointer",
+            fontFamily: "inherit", fontSize: 13, fontWeight: activeDay === i ? "bold" : "normal",
+            background: activeDay === i ? "linear-gradient(135deg, #FF6B35, #E91E63)" : "rgba(255,255,255,0.08)",
+            color: "#fff", transition: "all 0.2s", whiteSpace: "nowrap",
+            boxShadow: activeDay === i ? "0 4px 16px rgba(255,107,53,0.4)" : "none"
+          }}>{d.label}</button>
+        ))}
+      </div>
+
+      <div style={{ margin: "16px 16px 0", background: "rgba(255,255,255,0.06)", borderRadius: 18, padding: "18px 20px", border: "1px solid rgba(255,255,255,0.1)" }}>
+        <div style={{ fontSize: 11, letterSpacing: 2, textTransform: "uppercase", opacity: 0.5, marginBottom: 14 }}>Daily Totals</div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr", gap: 10 }}>
+          {[
+            { label: "Kcal", value: totalKcal, unit: "", color: "#FF6B35", max: 3500 },
+            { label: "Protein", value: totalProtein, unit: "g", color: "#4CAF50", max: 160 },
+            { label: "Carbs", value: totalCarbs, unit: "g", color: "#2196F3", max: 400 },
+            { label: "Fats", value: totalFats, unit: "g", color: "#FFC107", max: 100 },
+            { label: "Fibre", value: totalFibre, unit: "g", color: "#00BCD4", max: 40 },
+          ].map((m, i) => (
+            <div key={i} style={{ textAlign: "center" }}>
+              <div style={{ fontSize: 15, fontWeight: "bold", color: m.color }}>{m.value}{m.unit}</div>
+              <div style={{ fontSize: 9, opacity: 0.4, marginBottom: 6 }}>{m.label}</div>
+              <MacroBar value={m.value} max={m.max} color={m.color} />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ padding: "16px 16px 0", display: "flex", flexDirection: "column", gap: 10 }}>
+        {currentDay.meals.map((meal, i) => (
+          <div key={i} onClick={() => setExpandedMeal(expandedMeal === i ? null : i)} style={{
+            background: expandedMeal === i ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.05)",
+            border: `1px solid ${expandedMeal === i ? meal.color : "rgba(255,255,255,0.08)"}`,
+            borderRadius: 16, padding: "14px 16px", cursor: "pointer", transition: "all 0.2s",
+            boxShadow: expandedMeal === i ? `0 4px 20px ${meal.color}33` : "none"
+          }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <div style={{ width: 40, height: 40, borderRadius: 12, background: `${meal.color}22`, border: `1.5px solid ${meal.color}66`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 }}>{meal.icon}</div>
+                <div>
+                  <div style={{ fontWeight: "bold", fontSize: 14 }}>{meal.type}</div>
+                  <div style={{ fontSize: 11, opacity: 0.5, marginTop: 1 }}>{meal.time}</div>
+                </div>
+              </div>
+              <div style={{ textAlign: "right" }}>
+                <div style={{ fontSize: 13, color: "#FF6B35", fontWeight: "bold" }}>{meal.kcal} kcal</div>
+                <div style={{ fontSize: 10, marginTop: 2 }}>
+                  <span style={{ color: "#4CAF50" }}>P{meal.protein}</span><span style={{ opacity: 0.3 }}> · </span>
+                  <span style={{ color: "#2196F3" }}>C{meal.carbs}</span><span style={{ opacity: 0.3 }}> · </span>
+                  <span style={{ color: "#FFC107" }}>F{meal.fats}</span><span style={{ opacity: 0.3 }}> · </span>
+                  <span style={{ color: "#00BCD4" }}>Fi{meal.fibre}g</span>
+                </div>
+                <div style={{ fontSize: 9, opacity: 0.3, marginTop: 3 }}>{expandedMeal === i ? "▲ close" : "▼ details"}</div>
+              </div>
+            </div>
+
+            {expandedMeal === i && (
+              <div style={{ marginTop: 14, paddingTop: 12, borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+                <div style={{ fontSize: 10, opacity: 0.4, letterSpacing: 2, textTransform: "uppercase", marginBottom: 8 }}>Ingredients</div>
+                <div style={{ marginBottom: 14 }}>
+                  {meal.meals.map((item, j) => (
+                    <div key={j} style={{ display: "flex", alignItems: "center", gap: 10, padding: "6px 0", borderBottom: j < meal.meals.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none" }}>
+                      <div style={{ width: 6, height: 6, borderRadius: "50%", background: meal.color, flexShrink: 0 }} />
+                      <div style={{ fontSize: 13, opacity: 0.9 }}>{item}</div>
+                    </div>
+                  ))}
+                </div>
+
+                <button onClick={(e) => toggleRecipe(i, e)} style={{
+                  display: "flex", alignItems: "center", gap: 8, width: "100%",
+                  background: `${meal.color}18`, border: `1px solid ${meal.color}55`,
+                  borderRadius: 10, padding: "9px 12px", cursor: "pointer",
+                  fontFamily: "inherit", color: "#fff", fontSize: 12, fontWeight: "bold",
+                  marginBottom: showRecipe[i] ? 10 : 14
+                }}>
+                  <span>👨‍🍳</span>
+                  <span style={{ color: meal.color }}>{showRecipe[i] ? "Hide Recipe" : "How to Make It"}</span>
+                  <span style={{ marginLeft: "auto", opacity: 0.5, fontSize: 10 }}>{showRecipe[i] ? "▲" : "▼"}</span>
+                </button>
+
+                {showRecipe[i] && (
+                  <div style={{ background: "rgba(0,0,0,0.25)", borderRadius: 12, padding: "12px 14px", marginBottom: 14, border: `1px solid ${meal.color}33` }}>
+                    {meal.steps.map((step, si) => (
+                      <div key={si} style={{ display: "flex", gap: 10, padding: "6px 0", alignItems: "flex-start" }}>
+                        <div style={{ width: 20, height: 20, borderRadius: "50%", background: meal.color, color: "#000", fontSize: 10, fontWeight: "bold", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 1 }}>{si + 1}</div>
+                        <div style={{ fontSize: 12.5, opacity: 0.85, lineHeight: 1.5 }}>{step}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                <div style={{ background: "rgba(0,0,0,0.2)", borderRadius: 12, padding: "12px 14px" }}>
+                  <div style={{ fontSize: 10, opacity: 0.4, letterSpacing: 2, textTransform: "uppercase", marginBottom: 10 }}>Macro Breakdown</div>
+                  {[
+                    { label: "Protein", value: meal.protein, unit: "g", color: "#4CAF50", max: 55 },
+                    { label: "Carbs", value: meal.carbs, unit: "g", color: "#2196F3", max: 100 },
+                    { label: "Fats", value: meal.fats, unit: "g", color: "#FFC107", max: 30 },
+                    { label: "Fibre", value: meal.fibre, unit: "g", color: "#00BCD4", max: 15 },
+                  ].map((macro, mi) => (
+                    <div key={mi} style={{ marginBottom: mi < 3 ? 10 : 0 }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+                        <span style={{ fontSize: 11, color: macro.color }}>{macro.label}</span>
+                        <span style={{ fontSize: 11, opacity: 0.6 }}>{macro.value}{macro.unit}</span>
+                      </div>
+                      <MacroBar value={macro.value} max={macro.max} color={macro.color} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      <div style={{ margin: "12px 16px 0", background: "rgba(255,255,255,0.04)", border: "1px dashed rgba(255,255,255,0.1)", borderRadius: 12, padding: "12px 16px", display: "flex", alignItems: "center", gap: 10, fontSize: 12, opacity: 0.6 }}>
+        <span>🏋️</span><span>Gym @ <strong>10:00 AM</strong> — Pre-workout at 7:30 AM · Post-workout shake at 11:30 AM</span>
+      </div>
+
+      <div style={{ margin: "14px 16px 0", background: "rgba(33,150,243,0.07)", border: "1px solid rgba(33,150,243,0.18)", borderRadius: 16, padding: "16px" }}>
+        <div style={{ fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "#2196F3", marginBottom: 12 }}>📊 Your Daily Targets</div>
+        {[
+          { label: "🔥 Calories", target: "~3,000 kcal", note: "Lean bulk surplus" },
+          { label: "🟢 Protein", target: "120–135g", note: "2g per kg bodyweight" },
+          { label: "🔵 Carbs", target: "300–360g", note: "Primary energy source" },
+          { label: "🟡 Fats", target: "70–90g", note: "Hormones & recovery" },
+          { label: "🩵 Fibre", target: "25–35g", note: "Digestion & gut health" },
+        ].map((t, i) => (
+          <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 0", borderBottom: i < 4 ? "1px solid rgba(255,255,255,0.05)" : "none" }}>
+            <span style={{ fontSize: 13 }}>{t.label}</span>
+            <div style={{ textAlign: "right" }}>
+              <div style={{ fontSize: 13, fontWeight: "bold" }}>{t.target}</div>
+              <div style={{ fontSize: 10, opacity: 0.4 }}>{t.note}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ margin: "14px 16px 0", background: "rgba(255,107,53,0.07)", border: "1px solid rgba(255,107,53,0.18)", borderRadius: 16, padding: "16px" }}>
+        <div style={{ fontSize: 11, letterSpacing: 2, textTransform: "uppercase", color: "#FF6B35", marginBottom: 10 }}>💡 Tips</div>
+        {[
+          "Drink 3–4L water daily — especially important for fibre absorption",
+          "Dal, rajma, chana & veggies are your best fibre sources",
+          "Don't skip the before-bed snack — casein feeds muscles overnight",
+          "Sunday = rest day, reduce calories to ~2,600 kcal"
+        ].map((tip, i) => (
+          <div key={i} style={{ fontSize: 12, opacity: 0.75, padding: "5px 0", display: "flex", gap: 8 }}>
+            <span style={{ color: "#FF6B35" }}>→</span> {tip}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<MealPlan />);
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
